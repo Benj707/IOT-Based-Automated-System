@@ -9,8 +9,8 @@ PZEM004Tv30 pzem1(14, 12); // GPIO14(D5) to Tx PZEM004; GPIO12(D6) to Rx PZEM004
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-#define FIREBASE_HOST "test-nodemcu-f12a2-default-rtdb.firebaseio.com" //--> URL address of your Firebase Realtime Database.
-#define FIREBASE_AUTH "nQtBnAAIS23vvcSOryCtjk9xAiHrdu9TFhYJs9Vg" //--> Your firebase database secret code.
+#define FIREBASE_HOST "iotbasedautomatedsystemcsi-default-rtdb.asia-southeast1.firebasedatabase.app" //--> URL address of your Firebase Realtime Database.
+#define FIREBASE_AUTH "JuMhCEXJkDaWcdVixQmJ6GXrxxZ4U5BIn0pqOMaF" //--> Your firebase database secret code.
 
 #define ON_Board_LED 2
 
@@ -97,7 +97,7 @@ void update_lcd_display()
   Firebase.setString("power",pwr);
   lcd.setCursor(0,1);
   lcd.print("E:"+String(ener)+"kWh");
-  Firebase.setString("kwh",ener);
+  Firebase.setString("kWh",ener);
   X=1;
   }
     
