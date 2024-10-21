@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "587106212236",
+    "firebase_url": "https://iotbasedautomatedsystemcsi-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "iotbasedautomatedsystemcsi",
+    "storage_bucket": "iotbasedautomatedsystemcsi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587106212236:android:022c6b2f2a4c9d75cf9ea9",
+        "android_client_info": {
+          "package_name": "com.example.iot_basedautomatedsystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcZb2ktFw1zDaps6Gq7ch3dGR5hd8Nlmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
