@@ -4,8 +4,8 @@
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
 
-#define FIREBASE_HOST "test-nodemcu-f12a2-default-rtdb.firebaseio.com" //--> URL address of your Firebase Realtime Database.
-#define FIREBASE_AUTH "nQtBnAAIS23vvcSOryCtjk9xAiHrdu9TFhYJs9Vg" //--> Your firebase database secret code.
+#define FIREBASE_HOST "iotbasedautomatedsystemcsi-default-rtdb.asia-southeast1.firebasedatabase.app" //--> URL address of your Firebase Realtime Database.
+#define FIREBASE_AUTH "JuMhCEXJkDaWcdVixQmJ6GXrxxZ4U5BIn0pqOMaF" //--> Your firebase database secret code.
 
 String room1 = "";
 String room2 = "";
