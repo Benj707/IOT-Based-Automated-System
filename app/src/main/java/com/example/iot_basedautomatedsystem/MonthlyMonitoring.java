@@ -3,6 +3,7 @@ package com.example.iot_basedautomatedsystem;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -77,17 +78,20 @@ public class MonthlyMonitoring extends AppCompatActivity {
                         if (energy != null) {
                             entries.add(new Entry(monthIndex, energy));  // Use the monthIndex as the X value and voltage as Y value
                             monthIndex++;  // Increment the month index for the next entry
+                            Toast.makeText(getApplicationContext(), "DATA SUCCESSFULLY RETRIEVED", Toast.LENGTH_LONG).show();
                         }
                     }
                 }
 
                 // Once data is fetched, plot the graph
                 plotDataOnGraph();
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("Firebase", "Error fetching data", databaseError.toException());
+                Toast.makeText(getApplicationContext(), "FAILED TO RETRIEVE DATA", Toast.LENGTH_LONG).show();
             }
         });
     }
