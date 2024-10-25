@@ -13,6 +13,9 @@
         android:theme="@style/Theme.IOTBasedAutomatedSystem"
         tools:targetApi="31">
         <activity
+            android:name=".MonthlyMonitoring"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPass"
             android:exported="false" />
         <activity

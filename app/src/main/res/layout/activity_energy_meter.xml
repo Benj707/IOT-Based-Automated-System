@@ -20,6 +20,7 @@
     </TextView>
 
     <GridLayout
+        android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rowCount="3"
@@ -163,4 +164,16 @@
         </androidx.cardview.widget.CardView>
 
     </GridLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mReading"
+        android:layout_below="@id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MONTHLY MONITORING"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="@color/teal_700"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        />
 </RelativeLayout>
