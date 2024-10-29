@@ -53,7 +53,8 @@ public class EnergyMeter extends AppCompatActivity {
                 voltageTextView.setText(voltage);
                 currentTextView.setText(current);
                 frequencyTextView.setText(frequency);
-                kwhTextView.setText(kwh);
+                String formattedKwhValue = String.format("%.4f", kwh);
+                kwhTextView.setText(formattedKwhValue);
             }
 
             @Override

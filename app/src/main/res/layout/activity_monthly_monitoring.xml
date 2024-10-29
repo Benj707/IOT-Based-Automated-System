@@ -5,10 +5,25 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+    <!-- BarChart for monthly data -->
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="16dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp" />
+
+    <!-- TextView for displaying current year -->
+    <TextView
+        android:id="@+id/yearTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Year:"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp" />
+
 
 </LinearLayout>
