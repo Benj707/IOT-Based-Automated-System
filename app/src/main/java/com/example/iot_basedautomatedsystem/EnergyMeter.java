@@ -22,7 +22,7 @@ public class EnergyMeter extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private TextView voltageTextView;
     private TextView currentTextView;
-    private TextView frequencyTextView;
+    private TextView powerTextView;
     private TextView kwhTextView;
 
     @SuppressLint("MissingInflatedId")
@@ -34,7 +34,7 @@ public class EnergyMeter extends AppCompatActivity {
 
         voltageTextView = findViewById(R.id.value1);
         currentTextView = findViewById(R.id.value2);
-        frequencyTextView = findViewById(R.id.value3);
+        powerTextView = findViewById(R.id.value3);
         kwhTextView = findViewById(R.id.value4);
         MaterialButton reading = (MaterialButton) findViewById(R.id.mReading);
 
@@ -45,15 +45,18 @@ public class EnergyMeter extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Get the value from Firebase
-                String voltage = String.valueOf(dataSnapshot.child("voltage").getValue(Float.class));
-                String current = String.valueOf(dataSnapshot.child("current").getValue(Float.class));
-                String frequency = String.valueOf(dataSnapshot.child("power").getValue(Float.class));
-                String kwh = String.valueOf(dataSnapshot.child("kWh").getValue(Float.class));
+                Float voltage = dataSnapshot.child("voltage").getValue(Float.class);
+                Float current = dataSnapshot.child("current").getValue(Float.class);
+                Float power = dataSnapshot.child("power").getValue(Float.class);
+                Float kwh = dataSnapshot.child("kWh").getValue(Float.class);
 
-                voltageTextView.setText(voltage);
-                currentTextView.setText(current);
-                frequencyTextView.setText(frequency);
-                String formattedKwhValue = String.format("%.4f", kwh);
+                String formattedVoltageValue = String.format("%.1f", voltage);
+                voltageTextView.setText(formattedVoltageValue);
+                String formattedCurrentValue = String.format("%.1f", current);
+                currentTextView.setText(formattedCurrentValue);
+                String formattedPowerValue = String.format("%.1f", power);
+                powerTextView.setText(formattedPowerValue);
+                String formattedKwhValue = String.format("%.1f", kwh);
                 kwhTextView.setText(formattedKwhValue);
             }
 
@@ -62,7 +65,7 @@ public class EnergyMeter extends AppCompatActivity {
                 // Handle potential errors
                 voltageTextView.setText("Error loading data");
                 currentTextView.setText("Error loading data");
-                frequencyTextView.setText("Error loading data");
+                powerTextView.setText("Error loading data");
                 kwhTextView.setText("Error loading data");
             }
         });
