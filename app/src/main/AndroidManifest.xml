@@ -13,6 +13,9 @@
         android:theme="@style/Theme.IOTBasedAutomatedSystem"
         tools:targetApi="31">
         <activity
+            android:name=".WeeklyMonitoring"
+            android:exported="false" />
+        <activity
             android:name=".MonthlyMonitoring"
             android:exported="false" />
         <activity

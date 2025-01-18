@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import androidx.core.content.ContextCompat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -147,6 +148,14 @@ public class MonthlyMonitoring extends AppCompatActivity {
         // Apply colors to dataset
         barDataSet.setColors(colors);
         barDataSet.setValueTextSize(12f);
+
+        // Apply a custom formatter to display values with two decimal points
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getBarLabel(BarEntry barEntry) {
+                return String.format("%.2f", barEntry.getY());
+            }
+        });
 
         // Create BarData with the dataset
         BarData barData = new BarData(barDataSet);

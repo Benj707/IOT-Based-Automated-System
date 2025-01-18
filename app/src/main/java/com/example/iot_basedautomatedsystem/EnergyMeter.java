@@ -37,6 +37,7 @@ public class EnergyMeter extends AppCompatActivity {
         powerTextView = findViewById(R.id.value3);
         kwhTextView = findViewById(R.id.value4);
         MaterialButton reading = (MaterialButton) findViewById(R.id.mReading);
+        MaterialButton wreading = (MaterialButton) findViewById(R.id.wReading);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -77,6 +78,17 @@ public class EnergyMeter extends AppCompatActivity {
             }
         });
 
+        wreading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openWeeklyMonitoring();
+            }
+        });
+
+    }
+    public void openWeeklyMonitoring(){
+        Intent intent = new Intent(this, WeeklyMonitoring.class);
+        startActivity(intent);
     }
     public void openMonthlyMonitoring(){
         Intent intent = new Intent(this, MonthlyMonitoring.class);

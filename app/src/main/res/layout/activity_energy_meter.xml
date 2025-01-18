@@ -176,4 +176,17 @@
         android:textStyle="bold"
         android:textSize="15dp"
         />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/wReading"
+        android:layout_below="@id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WEEKLY MONITORING"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/teal_700"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        />
 </RelativeLayout>
