@@ -3,6 +3,7 @@ package com.example.iot_basedautomatedsystem;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -56,11 +57,33 @@ public class MonthlyMonitoring extends AppCompatActivity {
         yearTextView = findViewById(R.id.yearTextView);
 
         // Set the current year below the chart
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        int lastYear = sharedPreferences.getInt("lastYear", -1);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         yearTextView.setText("Year: " + currentYear);
 
+        // Check if the year has changed
+        if (lastYear != currentYear) {
+            resetFirebaseData();
+            // Update the stored year
+            sharedPreferences.edit().putInt("lastYear", currentYear).apply();
+        }
+
         // Fetch data from Firebase and plot the graph
         fetchDataFromFirebase();
+    }
+
+    private void resetFirebaseData() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("monthlyReading");
+
+        // Clear all data in the "monthlyReading" node
+        databaseReference.setValue(null).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getApplicationContext(), "Data reset for the new year", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Failed to reset data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchDataFromFirebase() {
