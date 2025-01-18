@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -55,6 +59,20 @@ public class WeeklyMonitoring extends AppCompatActivity {
         // Initialize month text view
         monthTextView = findViewById(R.id.monthTextView);
 
+        // Add this inside your onCreate method
+        Spinner monthSpinner = findViewById(R.id.monthSpinner);
+
+        // Create an array of month names
+        String[] months = {
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        };
+
+        // Set up the adapter to populate the Spinner
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, months);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthSpinner.setAdapter(monthAdapter);
+
         // Set the current month below the chart
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH) + 1; // Months are 0-indexed
@@ -67,8 +85,30 @@ public class WeeklyMonitoring extends AppCompatActivity {
             saveLastProcessedMonth(currentMonth);
         }
 
+        // Set the Spinner listener to detect month selection
+        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Get the selected month
+                String selectedMonth = months[position];
+
+                // Update the TextView to display the selected month
+                monthTextView.setText("Month: " + selectedMonth);
+
+                // Fetch data for the selected month
+                fetchDataFromFirebase(selectedMonth);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Optional: Handle the case when no month is selected
+            }
+        });
+
+
+
         // Fetch data from Firebase and plot the graph
-        fetchDataFromFirebase();
+        //fetchDataFromFirebase();
     }
 
     private boolean isNewMonth(int currentMonth) {
@@ -94,54 +134,58 @@ public class WeeklyMonitoring extends AppCompatActivity {
                         Toast.makeText(this, "Failed to reset data", Toast.LENGTH_SHORT).show());
     }
 
-    private void fetchDataFromFirebase() {
+    // Modify the fetchDataFromFirebase method to work with the new key format
+    private void fetchDataFromFirebase(String selectedMonth) {
+        // Clear previous data
+        entries.clear();
+        weekLabels.clear();
+
         // Reference to Firebase Realtime Database
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("weeklyReading");
 
-        // Attach a listener to read the data for the year and week
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 if (dataSnapshot.exists()) {
-                    Log.d("FirebaseData", "DataSnapshot: " + dataSnapshot.toString());
-                } else {
-                    Log.e("FirebaseData", "No data found at the specified reference.");
-                    Toast.makeText(getApplicationContext(), "No data available", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                    int weekIndex = 0;
 
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                int currentYear = calendar.get(Calendar.YEAR);
-                int weekIndex = 0;
+                    // Iterate over each week in the data
+                    for (DataSnapshot weekSnapshot : dataSnapshot.getChildren()) {
+                        // Fetch the month directly from the snapshot
+                        String month = weekSnapshot.child("month").getValue(String.class);
 
-                // Iterate over each week in the data
-                for (DataSnapshot weekSnapshot : dataSnapshot.getChildren()) {
-                    String weekKey = weekSnapshot.getKey(); // Example: "2025-W01"
-                    if (weekKey != null && weekKey.startsWith(String.valueOf(currentYear))) {
-                        // Rename format "2025-W01" to "Week 1", "2025-W02" to "Week 2", etc.
-                        String displayLabel = "Week " + weekKey.substring(6); // Extract "W01" and convert to "1"
-                        weekLabels.add(displayLabel);
+                        // Only process data if it matches the selected month
+                        if (month != null && month.equalsIgnoreCase(selectedMonth)) {
+                            String weekKey = weekSnapshot.getKey(); // e.g., "Jan-Week1", "Feb-Week2"
 
-                        // Fetch the "totalEnergy" value for the week
-                        Float energy = weekSnapshot.child("totalEnergy").getValue(Float.class);
+                            // Extract and format week number for display
+                            String displayLabel = weekKey.replaceAll("^(\\D+)-", "");  // Removes month part
+                            displayLabel = "Week " + displayLabel.substring(displayLabel.indexOf("Week") + 4);
 
-                        // Add data to graph entries
-                        if (energy != null) {
-                            entries.add(new BarEntry(weekIndex, energy));
-                            weekIndex++;
+                            // Add the formatted week label to the list
+                            weekLabels.add(displayLabel);
+
+                            // Fetch the "totalEnergy" value for the week
+                            Float energy = weekSnapshot.child("totalEnergy").getValue(Float.class);
+
+                            // Add data to graph entries
+                            if (energy != null) {
+                                entries.add(new BarEntry(weekIndex, energy));
+                                weekIndex++;
+                            }
                         }
                     }
-                }
 
-                if (weekLabels.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "No data available for this year", Toast.LENGTH_LONG).show();
+                    // If no data for the selected month
+                    if (weekLabels.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "No data available for the selected month", Toast.LENGTH_LONG).show();
+                    }
+
+                    // Update the graph with new data
+                    plotDataOnGraph();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Data successfully retrieved", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "No data available", Toast.LENGTH_LONG).show();
                 }
-
-                // Plot the data on the graph
-                plotDataOnGraph();
             }
 
             @Override
@@ -151,6 +195,12 @@ public class WeeklyMonitoring extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
 
 
     private String getMonthName(int monthNumber) {

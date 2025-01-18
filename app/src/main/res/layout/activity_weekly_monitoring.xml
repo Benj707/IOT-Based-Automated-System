@@ -20,6 +20,16 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="16dp" />
 
+    <Spinner
+        android:id="@+id/monthSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-16dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="right"
+        />
+
+
     <!-- Bar Chart for Weekly Monitoring -->
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
